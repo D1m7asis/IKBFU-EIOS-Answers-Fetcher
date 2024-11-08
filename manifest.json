@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "IKBFU EIOS Answers Extractor",
+  "version": "1.0",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "webNavigation"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://eios.kantiana.ru/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/16.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "host_permissions": [
+    "https://eios.kantiana.ru/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "libs/jszip.min.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}
