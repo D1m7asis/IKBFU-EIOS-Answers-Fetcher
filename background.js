@@ -152,23 +152,48 @@ function extractAnswersFromH5P(content) {
 }
 
 function parseAnswers(questions) {
-    const answers = questions.map(question => {
-        const correctAnswers = question.params.answers
-            .filter(answer => answer.correct) // Оставляем только правильные ответы
-            .map(answer => answer.text
-                .replace(/&nbsp;/g, ' ') // Заменить неразрывный пробел
-                .replace(/&amp;/g, '&')  // Заменить амперсанд
-                .replace(/&lt;/g, '<')   // Заменить < на обычный символ
-                .replace(/&gt;/g, '>')   // Заменить > на обычный символ
-                .replace(/<\/?div>/g, '') // Убираем теги div
-                .trim()); // Убираем пробелы по краям
+    return questions.map(question => {
+        let questionText;
 
+        if (question.params.question) {
+            questionText = question.params.question.replace(/<\/?p>/g, '').trim();
+        } else if (question.params.questions) {
+                questionText = question.params.questions[0].replace(/<\/?p>/g, '').trim();
+        } else if (question.params.textField) {
+                questionText = question.params.textField.replace(/<\/?p>/g, '').trim();
+        } else {  //textField
+            console.log('not found any at', question.params)
+            questionText = '<вопрос не найден>';
+        }// Заглушка, если поле question отсутствует
+
+        // Проверяем, есть ли поле answers и не пустое ли оно
+        const hasAnswers = question.params.answers && question.params.answers.length > 0;
+
+        // Обрабатываем правильные ответы, если они есть
+        let correctAnswers = [];
+        if (hasAnswers) {
+            correctAnswers = question.params.answers
+                .filter(answer => answer.correct) // Оставляем только правильные ответы
+                .map(answer => answer.text
+                    .replace(/&nbsp;/g, ' ') // Заменить неразрывный пробел
+                    .replace('&nbsp;', ' ') // Заменить неразрывный пробел
+                    .replace(/&amp;/g, '&')  // Заменить амперсанд
+                    .replace(/&lt;/g, '<')   // Заменить < на обычный символ
+                    .replace(/&gt;/g, '>')   // Заменить > на обычный символ
+                    .replace(/<\/?div>/g, '') // Убираем теги div
+                    .trim()); // Убираем пробелы по краям
+        }
+
+        // Если правильных ответов нет, добавляем заглушку
+        if (correctAnswers.length === 0 && questionText.length > 0) {
+            correctAnswers.push('<ответ содержится в полученном вопросе>');
+        } else if (correctAnswers.length === 0) {
+            correctAnswers.push('<ответ не найден>');
+        }
 
         return {
-            question: question.params.question.replace(/<\/?p>/g, '').trim(), // Текст вопроса без <p> тегов
+            question: questionText, // Текст вопроса (с заглушкой, если поле отсутствует)
             correctAnswers: correctAnswers
         };
     });
-
-    return answers;
 }
