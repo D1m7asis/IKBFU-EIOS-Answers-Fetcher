@@ -102,14 +102,13 @@ function highlightCorrectAnswersInIframe(iframeDocument, answers) {
     }
 }
 
-
 // Функция для загрузки ответов из локального хранилища и их выделения в iframe
 function loadAndHighlightAnswersInIframe(iframeDocument) {
     chrome.storage.local.get('answers', function (data) {
         if (data.answers && data.answers.length > 0) {
             console.log("Правильные ответы загружены из хранилища:", data.answers);
-            highlightCorrectAnswersInIframe(iframeDocument, data.answers);
-        } else {
+            prettierHighlight(data.answers);
+        } else {    
             console.log("Правильные ответы не найдены в хранилище.");
         }
     });
