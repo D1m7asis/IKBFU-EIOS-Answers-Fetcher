@@ -33,7 +33,7 @@ function prettierHighlight(answers)
         var blocks = subframe.querySelectorAll("div.question-container")
         if(blocks.lenght === 0)
         {
-            console.log("Вопросы не найдены!")
+            console.log("Вопросы в iframe не найдены!")
         }
         else
         {
@@ -47,7 +47,7 @@ function prettierHighlight(answers)
                 {
                     console.log("Вопросы не совпали... Номер вопроса:", index, clearText(q), clearText(answers[index].question))
                 }
-                
+
                 as.forEach(a => 
                 {
 
