@@ -15,21 +15,33 @@ function clearText(text)
 
 function prettierHighlight(answers)
 {
-    console.log("Начинаем выделение правильных ответов в iframe... (prettier edition)");
-    let subframe = document.querySelector("iframe")
+    let iframeDocument = document.querySelector("iframe").contentDocument
+    console.log("Начинаем выделение правильных ответов в iframe... (prettier edition)", iframeDocument);
+    let subframe = null
     try 
     {
-        subframe = subframe.contentDocument.querySelector("section").querySelector("iframe")
+        subframe = iframeDocument.querySelector("section")
+        if(subframe)
+        {
+            subframe = subframe.querySelector("iframe")
+        }
+        else
+        {
+            subframe = iframeDocument.querySelector("div.questionset.started")
+        }
     } 
     catch (error) 
     {
-        console.log("Не удалось выделить iframe...")
+        console.log("Не удалось выделить iframe...", error)
         subframe = document.body
+        return
     }
 
     if(subframe)
     {
-        subframe = subframe.contentDocument
+        if(subframe.contentDocument)
+            subframe = subframe.contentDocument
+
         var blocks = subframe.querySelectorAll("div.question-container")
         if(blocks.lenght === 0)
         {
