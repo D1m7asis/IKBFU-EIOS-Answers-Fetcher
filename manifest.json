@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "IKBFU EIOS Answers Extractor (Prettier editon)",
+  "name": "IKBFU EIOS Answers Extractor",
   "version": "1.0",
   "permissions": ["tabs", "activeTab", "scripting", "storage", "webNavigation"],
   "background": {

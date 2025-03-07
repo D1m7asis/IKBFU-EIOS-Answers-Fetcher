@@ -42,8 +42,9 @@ function prettierHighlight(answers)
         if(subframe.contentDocument)
             subframe = subframe.contentDocument
 
-        var blocks = subframe.querySelectorAll("div.question-container")
-        if(blocks.lenght === 0)
+        let blocks = subframe.querySelectorAll("div.question-container");
+        
+        if(blocks.length === 0)
         {
             console.log("Вопросы в iframe не найдены!")
         }
@@ -52,8 +53,8 @@ function prettierHighlight(answers)
             for (let index = 0; index < blocks.length; index++) 
             {
                 let block = blocks[index]
-                var q = block.querySelector("div.h5p-question-introduction").textContent
-                var as = block.querySelector("div.h5p-question-content").querySelectorAll("li")
+                let q = block.querySelector("div.h5p-question-introduction").textContent;
+                let as = block.querySelector("div.h5p-question-content").querySelectorAll("li");
 
                 if(clearText(q) !== clearText(answers[index].question))
                 {
