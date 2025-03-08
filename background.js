@@ -2,6 +2,21 @@ importScripts('libs/jszip.min.js');
 
 let PREPARSED_JSON = null
 
+function clearText(text) {
+    return text
+        .replace(/\u00a0/g, ' ')
+        .replace(/&nbsp;/g, ' ') // Заменить неразрывный пробел
+        .replace('&nbsp;', ' ')
+        .replace('/&amp;/g', '&')  // Заменить амперсанд
+        .replace(/&amp;/g, '&')
+        .replace('/&lt;/g', '<')   // Заменить < на обычный символ
+        .replace(/&lt;/g, '<')
+        .replace('/&gt;/g', '>')   // Заменить > на обычный символ
+        .replace(/&gt;/g, '>')
+        .replace('/<\/?div>/g', '') // Убираем теги div
+        .replace(/<\/?div>/g, '')
+        .trim() // Убираем пробелы по краям
+}
 
 function init() {
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -173,15 +188,7 @@ function parseAnswers(questions) {
         let correctAnswers = [];
         if (hasAnswers) {
             correctAnswers = question.params.answers
-                .filter(answer => answer.correct) // Оставляем только правильные ответы
-                .map(answer => answer.text
-                    .replace(/&nbsp;/g, ' ') // Заменить неразрывный пробел
-                    .replace('&nbsp;', ' ') // Заменить неразрывный пробел
-                    .replace(/&amp;/g, '&')  // Заменить амперсанд
-                    .replace(/&lt;/g, '<')   // Заменить < на обычный символ
-                    .replace(/&gt;/g, '>')   // Заменить > на обычный символ
-                    .replace(/<\/?div>/g, '') // Убираем теги div
-                    .trim()); // Убираем пробелы по краям
+                .filter(answer => answer.correct).map(answer => clearText(answer.text))  // Оставляем только правильные ответы
         }
 
         // Если правильных ответов нет, добавляем заглушку

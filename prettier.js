@@ -1,16 +1,18 @@
 function clearText(text)
 {
-    text = text
-        .replace('/&nbsp;/g', ' ') // Заменить неразрывный пробел
-        .replace('&nbsp;', ' ') // Заменить неразрывный пробел
-        .replace(/\u00a0/g, " ")
+    return text
+        .replace(/\u00a0/g, ' ')
+        .replace(/&nbsp;/g, ' ') // Заменить неразрывный пробел
+        .replace('&nbsp;', ' ')
         .replace('/&amp;/g', '&')  // Заменить амперсанд
+        .replace(/&amp;/g, '&')
         .replace('/&lt;/g', '<')   // Заменить < на обычный символ
+        .replace(/&lt;/g, '<')
         .replace('/&gt;/g', '>')   // Заменить > на обычный символ
+        .replace(/&gt;/g, '>')
         .replace('/<\/?div>/g', '') // Убираем теги div
+        .replace(/<\/?div>/g, '')
         .trim() // Убираем пробелы по краям
-        
-    return text;
 }
 
 function prettierHighlight(answers)
